@@ -1,0 +1,89 @@
+package Modelos;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.ResultSet;
+
+public class Tipo {
+	private int idTipo;
+	private String nomeTipo;
+
+	
+	public Tipo() {}
+	
+	public Tipo(int idTipo , String nomeTipo) {
+		this.idTipo = idTipo;
+		this.nomeTipo = nomeTipo;
+	}
+	
+	public int getIdTipo() {
+		return this.idTipo;
+	}
+	
+	public String getNomeTipo() {
+		return this.nomeTipo;
+	}
+	
+	public void setIdTipo(int idTipo) {
+		this.idTipo = idTipo;
+	}
+	
+	public void setNomeTipo(String nomeTipo) {
+		this.nomeTipo = nomeTipo;
+	}
+	
+	//Metodo crud 
+	
+	public void criar(Connection conexao) {
+		String inserir = "INSERT INTO Tipo" + "(idTipo, nomeTipo)" + "VALUES(?,?)";
+		
+		try (PreparedStatement pst = conexao.prepareStatement(inserir)){
+			pst.setInt(1, this.getIdTipo());
+			pst.setString(2, this.getNomeTipo());
+			
+			pst.execute();
+			
+			
+		}catch (SQLException ex) {
+			
+			System.out.println("Não foi possível manipular " + "a tabela Tipo.");
+			
+			ex.printStackTrace();
+		}
+	}
+	
+	public void carregar(Connection conexao) {
+		String consulta = "SELECT * FROM Tipo WHERE idTipo = ?";
+		
+		try(PreparedStatement pst = conexao.prepareStatement(consulta)) {
+			
+			pst.setInt(1, this.getIdTipo());
+			ResultSet resultado = pst.executeQuery();
+			if(resultado.next()) {
+				String nome = resultado.getString("nomeTipo");
+				this.setNomeTipo(nome);
+			}
+		}catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	public void atualizar(Connection conexao) {
+		String atualizacao = "UPDATE Tipo SET nomeTipo = ?" + "WHERE idTipo = ?";
+		
+		try(PreparedStatement pst = conexao.prepareStatement(atualizacao)) {
+			pst.setString(1, this.getNomeTipo());
+			pst.setInt(2, this.getIdTipo());
+			
+			pst.execute();
+		}catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	
+	
+	
+	
+}
