@@ -1,0 +1,34 @@
+package Modelos;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class Conexao {
+
+	static {
+		
+		try {
+			System.out.println("Procurando o driver...");
+			
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			
+			System.out.println("Driver encontrado com sucesso!");
+		}catch (ClassNotFoundException ex) {
+			
+			System.out.println("O drive não foi encontrado");
+		}
+	}
+	
+	public static Connection conectar() {
+		try {
+		return	DriverManager.
+				getConnection("jdbc:mysql://localhost/colecao", "ADMIN", "null");
+		}catch ( SQLException ex) {
+			
+			System.out.println("Não foi possivel conectar!");
+			ex.printStackTrace();
+			return null;
+		}
+	}
+}
